@@ -48,8 +48,8 @@ if (arg[1] ~= nil)
                     table.insert(stack, 0, line)
                 end
                 local scopes = {}
-                for item in reverseTable(stack) do
-                    table.insert(scopes, item.title)
+                for item, title in pairs(reverseTable(stack)) do
+                    table.insert(scopes, title)
                 end
                 table.remove(scopes)
                 local scopesStr = table.concat(scopes, '::')
@@ -65,12 +65,12 @@ if (arg[1] ~= nil)
                     local plevel = parent.level
                 end
                 if scopesStr then
-                    local scope = 'h' .. plevel .. ':' .. scopesStr 
+                    local scope = 'h' .. tostring(plevel) .. ':' .. scopesStr 
                 else
                     local scope = ''
                 end
                 local type = string.char(0x60 + level)
-                print(title .. "\t" .. path .. "\t/^" .. anchor .. "\$/;\"\t" .. type .. "\t" .. line .. ':' .. lineNo .. "\t" .. scope .. "\n")
+                print(title .. "\t" .. file_path .. "\t/^" .. anchor .. "\$/;\"\t" .. type .. "\t" .. tostring(line) .. ':' .. lineNo .. "\t" .. tostring(scope) .. "\n")
 
             -- if (isset($argv[2])) {
                 -- if ($level > 1) {
