@@ -5,7 +5,17 @@ function! s:doInsertAgenda(status, response)
 	echo a:response
 endfunction
 
-let s:bin_path = expand('<sfile>:p:h:h').'/bin/mdctags'
+
+if executable('php')
+
+  let s:bin_path = expand('<sfile>:p:h:h').'/bin/mdctags'
+elseif executable('lua')
+
+  let s:bin_path = expand('<sfile>:p:h:h').'/bin/mdtags.lua'
+else
+
+  let s:bin_path = expand('<sfile>:p:h:h').'/bin/mdctags'
+endif
 
 function! s:insertAgenda()
 	let md_path = expand('%:p')
