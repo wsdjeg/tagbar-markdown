@@ -23,13 +23,17 @@ if (arg[1] ~= nil)
                 in_code = not in_code
             end
             if not in_code and string.find(line, '^#+%s+') ~= nil
-                
                 then
-                print(line)
-                local title = string.find(line, '%S+$')
+                local title = string.match(line, '%S+$')
                 local anchor = #string.match(line, '^#+')
                 local line = { title = title, level = #string.match(line, '^#+')}
-                print(line.level)
+                if #stack == 0 then
+                    table.insert(stack, 0, line)
+                elseif stack[0].level < line.level then
+                    table.insert(stack, 0, line)
+                else
+                end
+                print(stack)
             end
         end
     end
