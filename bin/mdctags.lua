@@ -16,6 +16,7 @@ if (arg[1] ~= nil)
     local in_code = false
     local lineNo = 0
     if file then
+        lineNo = lineNo + 1
         for line in file:lines() do
             print(line)
         end
