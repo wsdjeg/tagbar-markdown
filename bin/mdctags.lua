@@ -16,9 +16,21 @@ if (arg[1] ~= nil)
     local in_code = false
     local lineNo = 0
     if file then
-        lineNo = lineNo + 1
         for line in file:lines() do
-            print(line)
+            lineNo = lineNo + 1
+            if string.find(line, '^```') ~= nil
+                then
+                in_code = not in_code
+            end
+            if not in_code and string.find(line, '^#+%s+') ~= nil
+                
+                then
+                print(line)
+                local title = string.find(line, '%S+$')
+                local anchor = #string.match(line, '^#+')
+                local line = { title = title, level = #string.match(line, '^#+')}
+                print(line.level)
+            end
         end
     end
 end
