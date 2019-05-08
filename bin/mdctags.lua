@@ -53,17 +53,25 @@ if (arg[1] ~= nil)
                 end
                 table.remove(scopes)
                 local scopesStr = table.concat(scopes, '::')
+                local level = line.level
+                if #stack < 2 then
+                    if level > 1 then
+                        local plevel = level - 1
+                    else
+                        local plevel = 0
+                    end
+                else
+                    local parent = stack[1]
+                    local plevel = parent.level
+                end
+                if scopesStr then
+                    local scope = 'h' .. plevel .. ':' .. scopesStr 
+                else
+                    local scope = ''
+                end
+                local type = string.char(0x60 + level)
+                print(title .. "\t" .. path .. "\t/^" .. anchor .. "\$/;\"\t" .. type .. "\t" .. line .. ':' .. lineNo .. "\t" .. scope .. "\n")
 
-            -- $level = $line['level'];
-            -- if (count($stack) < 2) {
-                -- $plevel = $level > 1 ? $level - 1 : 0;
-            -- } else {
-                -- $parent = $stack[1];
-                -- $plevel = $parent['level'];
-            -- }
-            -- $scope = $scopesStr ? "h$plevel:$scopesStr" : '';
-            -- $type = chr(0x60 + $level);
---
             -- if (isset($argv[2])) {
                 -- if ($level > 1) {
                     -- $title = $matches[2];
