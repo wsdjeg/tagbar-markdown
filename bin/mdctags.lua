@@ -8,6 +8,16 @@ if (arg[2] == nil)
     print("!_TAG_PROGRAM_VERSION 0.1.0 //'")
 end
 
+local function reverseTable(tab)
+	local tmp = {}
+	for i = 1, #tab do
+		local key = #tab
+		tmp[i] = table.remove(tab)
+	end
+
+	return tmp
+end
+
 if (arg[1] ~= nil)
     then
     local file = io.open(arg[1], "r")
@@ -32,8 +42,36 @@ if (arg[1] ~= nil)
                 elseif stack[0].level < line.level then
                     table.insert(stack, 0, line)
                 else
+                    while #stack ~= 0 and stack[0].level >= line.level do
+                        table.insert(stack, line)
+                    end
+                    table.insert(stack, 0, line)
                 end
-                print(stack)
+                local scopes = {}
+                for item in reverseTable(stack) do
+                    table.insert(scopes, item.title)
+                end
+                table.remove(scopes)
+                local scopesStr = table.concat(scopes, '::')
+
+            -- $level = $line['level'];
+            -- if (count($stack) < 2) {
+                -- $plevel = $level > 1 ? $level - 1 : 0;
+            -- } else {
+                -- $parent = $stack[1];
+                -- $plevel = $parent['level'];
+            -- }
+            -- $scope = $scopesStr ? "h$plevel:$scopesStr" : '';
+            -- $type = chr(0x60 + $level);
+--
+            -- if (isset($argv[2])) {
+                -- if ($level > 1) {
+                    -- $title = $matches[2];
+                    -- echo str_pad('', strlen($matches[1])-2, ' ')."- [$title](#$title)\n";
+                -- }
+            -- } else {
+                -- echo "$title\t$path\t/^$anchor\$/;\"\t$type\tline:$lineNo\t$scope\n";
+            -- }
             end
         end
     end
