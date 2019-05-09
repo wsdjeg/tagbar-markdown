@@ -8,14 +8,16 @@ if (arg[2] == nil)
     print("!_TAG_PROGRAM_VERSION 0.1.0 //'")
 end
 
-local function reverseTable(tab)
-	local tmp = {}
-	for i = 1, #tab do
-		local key = #tab
-		tmp[i] = table.remove(tab)
-	end
+local function reverseTable(arr)
+	local i, j = 1, #arr
 
-	return tmp
+	while i < j do
+		arr[i], arr[j] = arr[j], arr[i]
+
+		i = i + 1
+		j = j - 1
+	end
+    return arr
 end
 
 if (arg[1] ~= nil)
