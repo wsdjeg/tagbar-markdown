@@ -1,23 +1,23 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! s:doInsertAgenda(status, response)
-	echo a:response
-endfunction
-
-let s:bin_path = expand('<sfile>:p:h:h').'/bin/mdctags'
-
-function! s:insertAgenda()
-	let md_path = expand('%:p')
-	execute "read !".s:bin_path.' '.md_path.' 1'
-endfunction
-
-command! -nargs=0 MDAgenda call s:insertAgenda()
+if executable('php')
+	let s:bin = 'php'
+  let s:bin_argv = expand('<sfile>:p:h:h').'/bin/mdctags.php'
+elseif executable('lua')
+	let s:bin = 'lua'
+  let s:bin_argv = expand('<sfile>:p:h:h').'/bin/mdctags.lua'
+elseif executable('python')
+	let s:bin = 'python'
+  let s:bin_argv = expand('<sfile>:p:h:h').'/bin/mdctags.py'
+else
+  finish
+endif
 
 if !exists('g:tagbar_type_markdown')
 	let g:tagbar_type_markdown = {
-				\ 'ctagsbin'  : s:bin_path,
-				\ 'ctagsargs' : '',
+				\ 'ctagsbin'  : s:bin,
+				\ 'ctagsargs' : s:bin_argv,
 				\ 'kinds'     : [
 				\     'a:h1:0:0',
 				\     'b:h2:0:0',
