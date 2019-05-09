@@ -21,7 +21,7 @@ end
 if (arg[1] ~= nil)
     then
     local file = io.open(arg[1], "r")
-    local file_path = ''
+    local file_path = arg[1]
     local stack = {}
     local in_code = false
     local lineNo = 0
@@ -35,7 +35,7 @@ if (arg[1] ~= nil)
             if not in_code and string.find(line, '^#+%s+') ~= nil
                 then
                 local title = string.match(line, '%S+$')
-                local anchor = #string.match(line, '^#+')
+                local anchor = string.match(line, '^#+%s+.+')
                 local line = { title = title, level = #string.match(line, '^#+')}
                 if #stack == 0 then
                     table.insert(stack, 0, line)
@@ -51,7 +51,7 @@ if (arg[1] ~= nil)
                 for item, title in pairs(reverseTable(stack)) do
                     table.insert(scopes, title)
                 end
-                table.remove(scopes)
+
                 local scopesStr = table.concat(scopes, '::')
                 local level = line.level
                 if #stack < 2 then
@@ -70,7 +70,7 @@ if (arg[1] ~= nil)
                     local scope = ''
                 end
                 local type = string.char(0x60 + level)
-                print(title .. "\t" .. file_path .. "\t/^" .. anchor .. "\$/;\"\t" .. type .. "\t" .. tostring(line) .. ':' .. lineNo .. "\t" .. tostring(scope) .. "\n")
+                print(title .. "\t" .. file_path .. "\t/^" .. anchor .. "\$/;\"\t" .. type .. "\tline:" .. lineNo .. "\t" .. tostring(scope) .. "\n")
 
             -- if (isset($argv[2])) {
                 -- if ($level > 1) {
